@@ -254,7 +254,7 @@ int main(int argc, char** argv){
    else if(strcmp(argv[2],"-mc")  == 0){
       while(fgets(line, 256, fr)){        
          int len = strlen(line);
-         if (len > 0 && line[len-1] == '\n') line[--len] = '\0';
+         if (len > 0 && line[len-1] == '\n') line[--len] = '\0'; 
          //process each line character by character
          for(int i = 0; line[i] != '\0'; i++){
              if(line[i] == ' ') fprintf(fw, "/");
