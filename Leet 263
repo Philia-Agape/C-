@@ -1,0 +1,60 @@
+class Solution {
+public:
+    bool isUgly(int n) {
+        bool ans = true;
+        if(n == 1) return ans;
+        unordered_map<int,int> PrimeFactorization;
+        
+        FindPrimeFactorization(&n, 2, PrimeFactorization);
+        FindPrimeFactorization(&n, 3, PrimeFactorization);
+        FindPrimeFactorization(&n, 5, PrimeFactorization);
+        
+        int p = 7; 
+        while(p <= n){
+           if(n % p != 0) PrimeFactorization.insert(make_pair(p,0));
+           else{
+               /*k = 0;
+               while(n % p == 0){
+                  n /= p;
+                  ++k;
+               }
+               PrimeFactorization.insert(make_pair(p,k));*/
+               FindPrimeFactorization(&n, p, PrimeFactorization);
+               if(p > n) break;    
+           } 
+           p = FindNextPrime(p, n, PrimeFactorization);   
+           cout << "p = " << p << "\n"; 
+        }
+        
+        //2, 3, 5, 7, ...
+        unordered_map<int,int>::const_iterator it = PrimeFactorization.find(7);
+        while(it != PrimeFactorization.end()){
+           if(it->second != 0) ans = false;  
+        }
+        return ans;    
+    }
+    
+    void FindPrimeFactorization(int* n, int p, unordered_map<int,int>& PrimeFactorization){
+        int k = 0;
+        while(*n % p == 0){
+           *n /= p;
+           ++k;    
+        }
+        PrimeFactorization.insert(make_pair(p,k));
+        return;
+    }
+    
+    int FindNextPrime(int p, int n, const unordered_map<int,int> PrimeFactorization){
+        int next_p = p+2;
+        while(next_p <= n){
+           unordered_map<int,int>::const_iterator it = PrimeFactorization.begin();
+           while(it != PrimeFactorization.end()){ 
+              if(next_p % it->first == 0) break;
+              ++it; 
+           }
+           if(it == PrimeFactorization.end()) break;
+           next_p = next_p + 2;    
+        }
+        return next_p;
+    }
+};
